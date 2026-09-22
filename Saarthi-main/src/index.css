@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -62,7 +63,6 @@
 /* -----------------------------------------
    SAARTHI AUTHENTICATION INTERFACE TOKENS
    ----------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&display=swap');
 
 :root {
   --bg-dark-emerald: linear-gradient(135deg, #031710 0%, #082d20 50%, #0e4433 100%);

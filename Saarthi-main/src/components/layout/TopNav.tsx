@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
-import { adminStore } from '@/lib/adminStore';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { adminStore, CurrentUser } from '@/lib/adminStore';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -27,14 +27,32 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
   const trackRef = useRef<HTMLUListElement>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0, opacity: 0 });
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(adminStore.getCurrentUser());
+  const [pendingCount, setPendingCount] = useState(adminStore.getPendingVerificationsCount());
+
+  useEffect(() => {
+    return adminStore.subscribe(() => {
+      setCurrentUser(adminStore.getCurrentUser());
+      setPendingCount(adminStore.getPendingVerificationsCount());
+    });
+  }, []);
 
   const handleLogout = () => {
     setShowLogoutDialog(false);
-    navigate('/auth');
+    adminStore.logout();
+    navigate('/');
   };
 
-  const base = role === 'student' ? '/student' : '/alumni';
-  const userLinks = [
+  const effectiveRole = currentUser.role || role;
+  const base = effectiveRole === 'student' ? '/student' : '/alumni';
+  
+  interface NavItem {
+    name: string;
+    path: string;
+    badge?: string;
+  }
+
+  const userLinks: NavItem[] = [
     { name: 'Home', path: `${base}/home` },
     { name: 'Events', path: `${base}/events` },
     { name: 'Mentorship', path: `${base}/mentorship` },
@@ -44,23 +62,19 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
     { name: 'Fundraising', path: `${base}/fundraising` },
   ];
 
-  const [pendingCount, setPendingCount] = useState(adminStore.getPendingVerificationsCount());
-
-  useEffect(() => {
-    return adminStore.subscribe(() => {
-      setPendingCount(adminStore.getPendingVerificationsCount());
-    });
-  }, []);
-
-  const adminLinks = [
+  const adminLinks: NavItem[] = [
     { name: 'Home', path: '/admin/home' },
     { name: 'Users', path: '/admin/users' },
-    { name: 'Verifications', path: '/admin/verifications' },
+    { 
+      name: 'Verifications', 
+      path: '/admin/verifications', 
+      badge: pendingCount > 0 ? String(pendingCount) : undefined 
+    },
     { name: 'Events', path: '/admin/events' },
     { name: 'Reports', path: '/admin/reports' },
   ];
 
-  const navLinks = role === 'admin' ? adminLinks : userLinks;
+  const navLinks = effectiveRole === 'admin' ? adminLinks : userLinks;
 
   const updateIndicator = (element: HTMLElement | null) => {
     if (!element || !trackRef.current) return;
@@ -74,7 +88,6 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
   };
 
   useEffect(() => {
-    // Slight delay to ensure DOM is fully rendered
     const timeout = setTimeout(() => {
       if (trackRef.current) {
         const activeEl = trackRef.current.querySelector('.nav-item.active') as HTMLElement;
@@ -86,7 +99,6 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
       }
     }, 100);
     
-    // Reposition on window resize
     const handleResize = () => {
       const activeEl = trackRef.current?.querySelector('.nav-item.active') as HTMLElement;
       updateIndicator(activeEl);
@@ -108,11 +120,17 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
     }
   };
 
+  const initials = currentUser.fullName
+    ? currentUser.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    : (effectiveRole === 'admin' ? 'AD' : 'SA');
+
+  const homePath = effectiveRole === 'admin' ? '/admin/home' : `${base}/home`;
+
   return (
     <header className="navbar-wrapper">
       <nav className="saarthi-nav">
         {/* LEFT: BRAND */}
-        <Link to="/home" className="saarthi-brand-link">
+        <Link to={homePath} className="saarthi-brand-link">
           <div className="icon-crop-viewport">
             <img 
               src="/logo.png" 
@@ -164,42 +182,47 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
             <DropdownMenuTrigger asChild>
               <button className="flex flex-col items-center justify-center cursor-pointer text-decoration-none focus:outline-none bg-transparent border-none">
                 <Avatar className="w-8 h-8 mb-1 shadow-md">
-                  <AvatarFallback className="bg-[var(--btn-emerald)] text-white text-sm font-bold">
-                    {role === 'admin' ? 'A' : role === 'student' ? 'S' : 'T'}
+                  {currentUser.avatar && <AvatarImage src={currentUser.avatar} alt={currentUser.fullName} />}
+                  <AvatarFallback className="bg-[var(--btn-emerald)] text-white text-xs font-bold">
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <span className="text-[0.65rem] text-[#64748b] tracking-widest uppercase font-semibold">
-                  {role}
+                  {effectiveRole}
                 </span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" collisionPadding={24} className="w-56 p-2 rounded-2xl mt-2 border border-slate-100 shadow-xl bg-white">
+            <DropdownMenuContent align="center" collisionPadding={24} className="w-60 p-2 rounded-2xl mt-2 border border-slate-100 shadow-xl bg-white">
               <div className="flex flex-col items-center p-4">
                 <Avatar className="w-16 h-16 mb-3 shadow-sm border-2 border-slate-50">
-                  <AvatarFallback className="bg-[#0f4c3a] text-white text-2xl font-bold">
-                    {role === 'admin' ? 'A' : 'T'}
+                  {currentUser.avatar && <AvatarImage src={currentUser.avatar} alt={currentUser.fullName} />}
+                  <AvatarFallback className="bg-[#0f4c3a] text-white text-xl font-bold">
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-center">
-                  <p className="text-sm font-bold text-slate-900">
-                    {role === 'admin' ? 'System Administrator' : 'Tanvy Pandey'}
+                  <p className="text-sm font-bold text-slate-900 line-clamp-1">
+                    {currentUser.fullName}
                   </p>
-                  <p className="text-xs text-slate-500 flex items-center gap-1 justify-center mt-1 font-medium">
-                    <User className="w-3 h-3" /> {role === 'admin' ? 'admin@saarthi.edu' : 'tanvypandey@gmail.com'}
+                  <p className="text-xs text-slate-500 flex items-center gap-1 justify-center mt-1 font-medium truncate max-w-[200px]">
+                    <User className="w-3 h-3 shrink-0" /> {currentUser.email}
                   </p>
+                  <span className="mt-1.5 inline-block text-[0.65rem] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+                    {currentUser.designationOrDegree || (effectiveRole === 'student' ? 'Student Scholar' : 'Verified Alumnus')}
+                  </span>
                 </div>
               </div>
               <DropdownMenuSeparator className="my-1 border-dashed" />
               <DropdownMenuItem 
                 className="cursor-pointer text-sm font-medium py-2.5 px-3 rounded-lg hover:bg-slate-50 focus:bg-slate-50 transition-colors"
-                onClick={() => navigate(`/${role}/profile`)}
+                onClick={() => navigate(`/${effectiveRole}/profile`)}
               >
                 <User className="w-4 h-4 mr-2 text-slate-500" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator className="my-1 border-dashed" />
               <DropdownMenuItem 
-                className="cursor-pointer text-sm font-bold py-2.5 px-3 rounded-lg hover:bg-slate-50 focus:bg-slate-50 transition-colors justify-center mt-1"
+                className="cursor-pointer text-sm font-bold py-2.5 px-3 rounded-lg text-rose-600 hover:bg-rose-50 focus:bg-rose-50 transition-colors justify-center mt-1"
                 onClick={() => setShowLogoutDialog(true)}
               >
                 <LogOut className="w-4 h-4 mr-2" />
@@ -215,7 +238,7 @@ export default function TopNav({ role = 'alumni' }: { role?: 'student' | 'alumni
                   <LogOut className="w-5 h-5 text-[#1FAF73]" /> Log Out
                 </AlertDialogTitle>
                 <AlertDialogDescription className="text-slate-500 text-sm font-medium pt-2 pb-6">
-                  Are you sure you want to log out?
+                  Are you sure you want to end your current Saarthi session?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex items-center gap-3 sm:space-x-0 sm:justify-end">

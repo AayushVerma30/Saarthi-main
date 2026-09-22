@@ -1,34 +1,47 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { adminStore } from '@/lib/adminStore';
 
 const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [view, setView] = useState<'signin' | 'signup'>('signin');
   const [showSigninPassword, setShowSigninPassword] = useState(false);
-  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [email, setEmail] = useState('admin@saarthi.edu');
+  const [password, setPassword] = useState('admin123');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem('userRole', 'admin');
+    adminStore.login(email.trim() || 'admin@saarthi.edu', 'admin', password);
     navigate('/admin/home');
   };
 
   return (
     <div className="auth-viewport">
-      <div className="auth-container" data-view={view}>
+      <div className="auth-container" data-view="signin">
         
-        {/* FORMS LAYER (Underneath) */}
+        {/* FORMS LAYER */}
         <div className="forms-wrapper">
           
-          {/* SIGN IN FORM (Always positioned in the Left Half) */}
+          {/* SIGN IN FORM */}
           <div className="form-panel form-signin">
             <h2 className="title">Sign in as Admin</h2>
+
+            <div className="mb-4">
+              <span className="inline-block text-[0.75rem] px-3 py-1 bg-amber-50 text-amber-900 border border-amber-300 font-semibold rounded-full">
+                🔒 Institutional Administrative Portal
+              </span>
+            </div>
 
             <form className="actual-form" onSubmit={handleLogin}>
               <div className="field relative">
                 <label>Admin Email</label>
                 <div className="input-wrapper">
-                  <input type="text" placeholder="Enter Your Email" required />
+                  <input 
+                    type="email" 
+                    placeholder="admin@saarthi.edu" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required 
+                  />
                   <span className="input-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                   </span>
@@ -40,6 +53,8 @@ const AdminLoginPage: React.FC = () => {
                   <input 
                     type={showSigninPassword ? "text" : "password"} 
                     placeholder="••••••••" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required 
                   />
                   <button 
@@ -57,7 +72,7 @@ const AdminLoginPage: React.FC = () => {
               </div>
               <div className="meta-row" style={{ gap: '1rem' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}>
-                  <input type="checkbox" defaultChecked /> Keep me signed in
+                  <input type="checkbox" defaultChecked /> Remember Admin Session
                 </label>
               </div>
               <button type="submit" className="submit-action">Sign in as Admin</button>
@@ -65,21 +80,17 @@ const AdminLoginPage: React.FC = () => {
 
             <div className="bottom-links">
               <p className="bottom-cta">
-                <Link to="/auth" className="link-btn golden-underline">Back to Student / Alumni Login</Link>
+                <Link to="/" className="link-btn golden-underline">Back to Student / Alumni Login</Link>
               </p>
             </div>
           </div>
 
-
         </div>
 
-        {/* SLIDING EMERALD OVERLAY (Moves on top without clipping text) */}
+        {/* SLIDING EMERALD OVERLAY */}
         <div className="sliding-overlay">
           <div className="overlay-track">
             
-
-
-            {/* Visible when in Sign In Mode (Right Side) */}
             <div className="overlay-panel overlay-signin-text">
               <div className="blade-brand-lockup">
                 <div className="blade-icon-frame">
@@ -92,7 +103,7 @@ const AdminLoginPage: React.FC = () => {
                 <span className="blade-brand-title">Saarthi</span>
               </div>
               <h3 className="hero-title">Welcome back, <em>Admin.</em></h3>
-              <p className="hero-desc">Access your dashboard to oversee the institutional network and verify new accounts.</p>
+              <p className="hero-desc">Access your institutional dashboard to verify accounts, monitor active events, and manage reports.</p>
             </div>
 
           </div>
