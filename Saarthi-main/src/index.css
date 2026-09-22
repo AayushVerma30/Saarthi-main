@@ -1,0 +1,921 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 164 67% 18%; /* Emerald btn #0F4C3A */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 164 67% 18%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 164 67% 18%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-color: #F3FAF6; /* Subtle Mint Soft Surface */
+  }
+}
+
+/* -----------------------------------------
+   SAARTHI AUTHENTICATION INTERFACE TOKENS
+   ----------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&display=swap');
+
+:root {
+  --bg-dark-emerald: linear-gradient(135deg, #031710 0%, #082d20 50%, #0e4433 100%);
+  --blade-gradient: linear-gradient(155deg, #041b13 0%, #0b3627 100%);
+  --card-cream: #FAF7EE;
+  --btn-emerald: #0a3324;
+  --gold-highlight: #F5C347;
+
+  /* Alumni Dashboard Colors */
+  --bg-deep-forest: #041D14;
+  --emerald-card: #0B3528;
+  --lime-accent: #B8E986;
+  --green-glow: #1FAF73;
+  --text-cream: #FAF7EE;
+}
+
+.auth-viewport {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark-emerald);
+  padding: 2rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.auth-container {
+  position: relative;
+  width: 100%;
+  max-width: 960px; /* Reduced from 1080px */
+  min-height: 600px;
+  background: var(--card-cream);
+  border-radius: 28px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+  overflow: hidden; /* STRICT: Nothing ever overflows this box */
+}
+
+/* 2-COLUMN BASE GRID FOR FORMS */
+.forms-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.form-panel {
+  width: 50%;
+  height: 100%;
+  padding: 3.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1.25rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 45px;
+  height: 4px;
+  background-color: var(--gold-highlight);
+  border-radius: 2px;
+}
+
+/* ROLE SELECTOR */
+.role-switch {
+  display: inline-flex;
+  background: #ECE7D8;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  width: fit-content;
+  margin-bottom: 1.25rem;
+}
+
+.role-btn {
+  font-family: 'Quicksand', sans-serif;
+  border: none;
+  background: transparent;
+  padding: 6px 20px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role-btn.active {
+  background: var(--btn-emerald);
+  color: #ffffff;
+}
+
+/* FORM FIELDS */
+.actual-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.field.relative {
+  position: relative;
+}
+
+.field label {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  padding-right: 2.5rem !important; /* Space for the icon */
+}
+
+.input-icon {
+  position: absolute;
+  right: 0.75rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+button.input-icon {
+  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.field input, .input-wrapper input {
+  font-family: 'Quicksand', sans-serif;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #D6D0BE;
+  background: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.field input:focus, .input-wrapper input:focus {
+  border-color: var(--gold-highlight); /* Golden hover instead of green */
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--gold-highlight);
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  flex-wrap: nowrap;
+}
+
+.link { font-family: 'Quicksand', sans-serif; color: #64748b; text-decoration: underline; }
+
+.submit-action {
+  font-family: 'Quicksand', sans-serif;
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  background: var(--btn-emerald);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-action:hover {
+  background: #15553e;
+}
+
+.bottom-cta {
+  font-family: 'Quicksand', sans-serif;
+  margin-top: 1.25rem;
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 600;
+  text-align: center;
+}
+
+.link-btn {
+  font-family: 'Quicksand', sans-serif;
+  background: none;
+  border: none;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.golden-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--gold-highlight);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* ====================================================
+   SLIDING OVERLAY WITH CLIP-PATH (NO OVERFLOW BUGS)
+   ==================================================== */
+.sliding-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%; /* Slightly wider for the slant */
+  height: 100%;
+  background: var(--blade-gradient);
+  z-index: 5;
+  transition: transform 0.65s cubic-bezier(0.7, 0, 0.25, 1), clip-path 0.65s cubic-bezier(0.7, 0, 0.25, 1);
+  box-shadow: 0 0 50px rgba(0,0,0,0.4);
+}
+
+/* Sign-in state: Overlay is on the RIGHT side with slant */
+.auth-container[data-view="signin"] .sliding-overlay {
+  transform: translateX(82%);
+  clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Sign-up state: Overlay is on the LEFT side with inverted slant */
+.auth-container[data-view="signup"] .sliding-overlay {
+  transform: translateX(0%);
+  clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%);
+}
+
+/* OVERLAY CONTENT TRACK */
+.overlay-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4rem;
+  color: #ffffff;
+  transition: opacity 0.3s ease;
+}
+
+/* Container sitting above Welcome Back */
+.blade-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  background: transparent !important;
+}
+
+/* Scaled Viewport - No square box or mismatched background */
+.blade-icon-frame {
+  width: 64px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent !important; /* Eliminates the green square patch */
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Scaled artwork blending seamlessly with emerald card background */
+.blade-chariot-scaled {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Zooms directly onto the chariot artwork */
+  transform: scale(2.6);
+  transform-origin: center center;
+  background: transparent !important;
+  /* Seamless blend into the card's dark emerald background */
+  mix-blend-mode: lighten;
+  filter: contrast(1.15) brightness(1.1);
+  display: block;
+}
+
+/* Typography matching */
+.blade-brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.hero-title {
+  font-family: 'Newsreader', serif;
+  font-size: 2.85rem;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+/* GOLDEN ACCENT FOR JOURNEY & BACK */
+.hero-title em {
+  font-style: italic;
+  color: var(--gold-highlight);
+}
+
+.hero-desc {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #B5D1C7;
+}
+
+/* Visibility toggling inside overlay */
+.auth-container[data-view="signin"] .overlay-signin-text {
+  opacity: 1;
+  pointer-events: auto;
+}
+.auth-container[data-view="signin"] .overlay-signup-text {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.auth-container[data-view="signup"] .overlay-signin-text {
+  opacity: 0;
+  pointer-events: none;
+}
+.auth-container[data-view="signup"] .overlay-signup-text {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ====================================================
+   ALUMNI DASHBOARD & NAVBAR
+   ==================================================== */
+
+/* FULL-WIDTH NAVBAR */
+.navbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.saarthi-nav {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  height: 80px;
+}
+
+.saarthi-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  background: transparent !important;
+}
+
+/* Tight frame that cuts off the huge outer canvas */
+.icon-crop-viewport {
+  width: 58px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Excess blank canvas gets clipped here */
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Scaled up image focusing only on the chariot artwork */
+.cropped-chariot-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Zooms past the outer whitespace directly to the chariot */
+  transform: scale(2.8);
+  transform-origin: center center;
+  mix-blend-mode: multiply !important; /* Removes white background */
+  background: transparent !important;
+  display: block;
+}
+
+.brand-text-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.95rem;
+  font-weight: 700;
+  color: #041D14;
+  line-height: 1;
+  transform: translateY(-4px);
+}
+
+.nav-links {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+/* CONTAINER SETUP */
+.nav-item {
+  position: relative;
+  text-decoration: none;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  padding: 0.35rem 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/* ROLLING WRAPPER MASK */
+.roll-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  height: 1.35em; /* Locks height to single line */
+  line-height: 1.35em;
+  overflow: hidden; /* Clips text rolling in and out */
+}
+
+/* INDIVIDUAL TEXT SPANS */
+.roll-text {
+  display: inline-block;
+  white-space: nowrap;
+  color: #0f172a;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              color 0.2s ease;
+  will-change: transform;
+}
+
+.roll-text.roll-clone {
+  color: #041d14; /* Can use a subtle highlight tone */
+}
+
+/* HOVER STATE: TRANSLATE BOTH TEXTS UP BY 100% */
+.nav-item:hover .roll-text {
+  transform: translateY(-100%);
+}
+
+/* ACTIVE LINK ACCENT */
+.nav-item.active .roll-text {
+  color: #000000;
+  font-weight: 700;
+}
+
+/* SLIDING ELASTIC UNDERLINE */
+.nav-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: #000000;
+  border-radius: 2px;
+  pointer-events: none;
+  width: 0;
+  transform: translateX(0);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              width 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.2s ease;
+}
+
+.nav-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-pill-action {
+  background: var(--lime-accent);
+  color: #041D14;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn-pill-action:hover { background: #cbf39f; transform: translateY(-1px); }
+
+/* HERO GRID */
+.hero-section {
+  padding: 4rem 2rem 6rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-container {
+  max-width: 1280px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.dashboard-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.75rem;
+  line-height: 1.15;
+  margin: 1.25rem 0;
+  color: #ffffff;
+}
+
+.dashboard-hero-title em {
+  font-style: italic;
+  color: var(--lime-accent);
+}
+
+.hero-subtext {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #94a3b8;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.btn-primary-glow {
+  background: var(--lime-accent);
+  color: #041D14;
+  font-weight: 700;
+  padding: 0.9rem 1.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(184, 233, 134, 0.25);
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-outline-glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.9rem 1.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* WATERMARK CROP MASK */
+.image-mask-frame {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  border-radius: 36px;
+  overflow: hidden; /* Clips out stock and Framer watermarks */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-img-clean {
+  width: 100%;
+  height: 105%; /* Slight zoom cuts off bottom branding */
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+
+/* STATS MARQUEE */
+.stats-marquee {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto 5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-item h3 {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* COMMUNITY SHOWCASE GRID */
+.community-grid {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto 5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.showcase-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 400px;
+}
+
+.showcase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-content {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(4,29,20,0.85) 15%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+}
+
+.showcase-tag {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  width: fit-content;
+  margin-bottom: 1rem;
+}
+
+.showcase-content h4 {
+  color: #fff;
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.5rem;
+}
+
+.showcase-content p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(31, 175, 115, 0.1);
+  color: var(--lime-accent);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(31, 175, 115, 0.2);
+}
+
+/* QUICK ACTION TILES */
+.quick-actions {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto 6rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.action-tile {
+  background: var(--emerald-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: transform 0.2s, background 0.2s;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-tile:hover {
+  transform: translateY(-4px);
+  background: rgba(11, 53, 40, 0.8);
+}
+
+.action-tile h4 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.action-tile p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Update the Right Form Panel (Create Account) */
+.pane-right,
+.pane-signup,
+.form-signup {
+  /* Generous left padding to keep it well clear of the slanted blade */
+  padding: 3.5rem 3.5rem 3.5rem 5.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+}
+
+/* Ensure the form container itself has room to breathe */
+.pane-right .auth-form,
+.pane-signup .auth-form,
+.form-signup .actual-form {
+  width: 100% !important;
+  max-width: 450px !important;
+}
+
+/* Keep the heading, pills, and switch prompt aligned with the form */
+.pane-right .form-title,
+.pane-right .form-heading,
+.pane-right .role-pills,
+.pane-right .role-switch,
+.pane-right .bottom-switch,
+.pane-right .switch-prompt {
+  margin-left: 0 !important;
+}
+
+/* Profile Card Overrides for Dark Background */
+.profile-card .field label {
+  color: var(--card-cream) !important;
+}
+.profile-card .title::after {
+  background-color: var(--gold-highlight) !important;
+}
+
+/* =========================================================
+   GLOBAL SHADCN-STYLE LIGHT GREEN MINIMAL SCROLLBAR
+   ========================================================= */
+
+/* Firefox Standard */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(31, 175, 115, 0.55) transparent;
+}
+
+/* WebKit & Chromium Browsers (Chrome, Edge, Safari, Opera) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Scrollbar Track (Invisible / Clean) */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+  margin: 4px;
+}
+
+/* Scrollbar Thumb (Translucent Light Green) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(31, 175, 115, 0.5); /* Semi-transparent visible light green */
+  border-radius: 9999px;
+  border: 2px solid transparent; /* Gives padding inside track */
+  background-clip: padding-box;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Thumb on Hover (Brighter & More Opaque) */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(31, 175, 115, 0.85); /* Vibrant on hover */
+}
+
+/* Thumb on Active Click Drag */
+::-webkit-scrollbar-thumb:active {
+  background-color: #1faf73;
+}
+
+/* Hide Default Scrollbar Arrows / Buttons Completely */
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Ensure shadcn ScrollArea components inherit this palette */
+[data-radix-scroll-area-thumb] {
+  background-color: rgba(31, 175, 115, 0.55) !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+[data-radix-scroll-area-thumb]:hover {
+  background-color: rgba(31, 175, 115, 0.85) !important;
+}
